@@ -1,6 +1,6 @@
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
       <h2 className="text-base font-semibold text-gray-900 mb-4 pb-3 border-b border-gray-100">
         {title}
       </h2>
@@ -39,11 +39,11 @@ function StackRow({
   color: string;
 }) {
   return (
-    <div className="flex items-start gap-4 py-3 border-b border-gray-50 last:border-0">
-      <span className="text-xs text-gray-400 font-medium w-20 shrink-0 pt-0.5 uppercase tracking-wide">
+    <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 py-3 border-b border-gray-50 last:border-0">
+      <span className="text-xs text-gray-400 font-medium sm:w-20 shrink-0 pt-0.5 uppercase tracking-wide">
         {layer}
       </span>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <Badge label={tech} color={color} />
         </div>
@@ -255,12 +255,12 @@ model Step {
 
       {/* GraphQL surface */}
       <Section title="GraphQL API Surface">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
               Queries
             </h3>
-            <ul className="space-y-2 font-mono text-xs text-gray-700">
+            <ul className="space-y-2 font-mono text-xs text-gray-700 break-all">
               {[
                 'health: String!',
                 'parts: [Part!]!',
@@ -274,7 +274,7 @@ model Step {
               ].map((q) => (
                 <li key={q} className="flex items-start gap-2">
                   <span className="text-blue-400 shrink-0">›</span>
-                  {q}
+                  <span>{q}</span>
                 </li>
               ))}
             </ul>
@@ -283,7 +283,7 @@ model Step {
             <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
               Mutations
             </h3>
-            <ul className="space-y-2 font-mono text-xs text-gray-700">
+            <ul className="space-y-2 font-mono text-xs text-gray-700 break-all">
               {[
                 'createPart(input): Part!',
                 'updatePart(id, input): Part!',
@@ -296,7 +296,7 @@ model Step {
               ].map((m) => (
                 <li key={m} className="flex items-start gap-2">
                   <span className="text-violet-400 shrink-0">›</span>
-                  {m}
+                  <span>{m}</span>
                 </li>
               ))}
             </ul>
