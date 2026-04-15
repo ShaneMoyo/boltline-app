@@ -11,6 +11,7 @@ import {
 } from './schema/index.js';
 import { resolvers } from './resolvers/index.js';
 import { createContext } from './lib/context.js';
+import { formatError } from './lib/formatError.js';
 
 const server = new ApolloServer({
   typeDefs: [
@@ -23,6 +24,7 @@ const server = new ApolloServer({
     authTypeDefs,
   ],
   resolvers,
+  formatError,
 });
 
 const { url } = await startStandaloneServer(server, {
