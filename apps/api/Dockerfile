@@ -21,7 +21,7 @@ RUN pnpm --filter @boltline/api run build
 # --- Runner stage ---
 FROM node:20-alpine AS runner
 
-RUN apk add --no-cache postgresql-client
+RUN apk add --no-cache postgresql-client openssl
 RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
 WORKDIR /app
@@ -38,6 +38,7 @@ COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 RUN pnpm --filter @boltline/api exec prisma generate
 
 RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -s /bin/sh -D appuser
+RUN chown -R appuser:appgroup /app
 
 COPY apps/api/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
