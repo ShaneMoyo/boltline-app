@@ -82,6 +82,7 @@ export const workOrderResolvers = {
   },
 
   WorkOrder: {
+    createdAt: (parent: { createdAt: Date }) => parent.createdAt.toISOString(),
     part: (parent: { partId: string }, _: unknown, { prisma }: Context) =>
       prisma.part.findUniqueOrThrow({ where: { id: parent.partId } }),
     steps: (parent: { id: string }, _: unknown, { prisma }: Context) =>

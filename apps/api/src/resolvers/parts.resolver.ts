@@ -3,6 +3,11 @@ import { requireAuth } from '../lib/requireAuth.js';
 import { validate, CreatePartSchema, UpdatePartSchema } from '../lib/validation.js';
 
 export const partsResolvers = {
+  Part: {
+    createdAt: (parent: { createdAt: Date }) => parent.createdAt.toISOString(),
+    updatedAt: (parent: { updatedAt: Date }) => parent.updatedAt.toISOString(),
+  },
+
   Query: {
     parts: (_: unknown, __: unknown, { prisma }: Context) =>
       prisma.part.findMany({ orderBy: { createdAt: 'desc' } }),

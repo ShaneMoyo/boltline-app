@@ -22,6 +22,8 @@ export const resolvers = {
     ...workOrderResolvers.Mutation,
     ...authResolvers.Mutation,
   },
+  Part: partsResolvers.Part,
   InventoryItem: inventoryResolvers.InventoryItem,
   WorkOrder: workOrderResolvers.WorkOrder,
+  ActivityLog: dashboardResolvers.ActivityLog,
 };

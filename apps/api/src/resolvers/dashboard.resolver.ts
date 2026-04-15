@@ -1,6 +1,10 @@
 import { Context } from '../lib/context.js';
 
 export const dashboardResolvers = {
+  ActivityLog: {
+    createdAt: (parent: { createdAt: Date }) => parent.createdAt.toISOString(),
+  },
+
   Query: {
     dashboardStats: async (_: unknown, __: unknown, { prisma }: Context) => {
       const [totalParts, openWorkOrders, completedWorkOrdersThisMonth, lowInventoryItems] =
