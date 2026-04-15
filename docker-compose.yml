@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: boltline
       POSTGRES_USER: boltline
-      POSTGRES_PASSWORD: boltline
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-boltline}
     ports:
       - '5432:5432'
     volumes:
@@ -24,8 +24,11 @@ services:
     ports:
       - '4000:4000'
     environment:
-      DATABASE_URL: postgresql://boltline:boltline@postgres:5432/boltline
+      DATABASE_URL: ${DATABASE_URL:-postgresql://boltline:boltline@postgres:5432/boltline}
       NODE_ENV: development
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
       DB_HOST: postgres
       DB_USER: boltline
     depends_on:
