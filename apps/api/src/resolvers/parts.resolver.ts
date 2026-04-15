@@ -1,19 +1,6 @@
 import { Context } from '../lib/context.js';
 import { requireAuth } from '../lib/requireAuth.js';
-
-interface CreatePartInput {
-  partNumber: string;
-  name: string;
-  description?: string;
-  unit: string;
-}
-
-interface UpdatePartInput {
-  partNumber?: string;
-  name?: string;
-  description?: string;
-  unit?: string;
-}
+import { validate, CreatePartSchema, UpdatePartSchema } from '../lib/validation.js';
 
 export const partsResolvers = {
   Query: {
@@ -25,14 +12,16 @@ export const partsResolvers = {
   },
 
   Mutation: {
-    createPart: (_: unknown, { input }: { input: CreatePartInput }, ctx: Context) => {
+    createPart: (_: unknown, { input }: { input: unknown }, ctx: Context) => {
       requireAuth(ctx);
-      return ctx.prisma.part.create({ data: input });
+      const data = validate(CreatePartSchema, input);
+      return ctx.prisma.part.create({ data });
     },
 
-    updatePart: (_: unknown, { id, input }: { id: string; input: UpdatePartInput }, ctx: Context) => {
+    updatePart: (_: unknown, { id, input }: { id: string; input: unknown }, ctx: Context) => {
       requireAuth(ctx);
-      return ctx.prisma.part.update({ where: { id }, data: input });
+      const data = validate(UpdatePartSchema, input);
+      return ctx.prisma.part.update({ where: { id }, data });
     },
   },
 };

@@ -1,11 +1,6 @@
 import { Context } from '../lib/context.js';
 import { requireAuth } from '../lib/requireAuth.js';
-
-interface CreateWorkOrderInput {
-  title: string;
-  partId: string;
-  steps: string[];
-}
+import { validate, CreateWorkOrderSchema } from '../lib/validation.js';
 
 type WorkOrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETE';
 
@@ -28,16 +23,17 @@ export const workOrderResolvers = {
   Mutation: {
     createWorkOrder: async (
       _: unknown,
-      { input }: { input: CreateWorkOrderInput },
+      { input }: { input: unknown },
       ctx: Context,
     ) => {
       requireAuth(ctx);
+      const data = validate(CreateWorkOrderSchema, input);
       return ctx.prisma.workOrder.create({
         data: {
-          title: input.title,
-          partId: input.partId,
+          title: data.title,
+          partId: data.partId,
           steps: {
-            create: input.steps.map((description) => ({ description })),
+            create: data.steps.map((description) => ({ description })),
           },
         },
         include: { part: true, steps: true },

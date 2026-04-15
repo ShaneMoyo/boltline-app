@@ -1,11 +1,6 @@
 import { Context } from '../lib/context.js';
 import { requireAuth } from '../lib/requireAuth.js';
-
-interface AddInventoryItemInput {
-  partId: string;
-  location: string;
-  quantity: number;
-}
+import { validate, AddInventoryItemSchema } from '../lib/validation.js';
 
 export const inventoryResolvers = {
   Query: {
@@ -27,11 +22,12 @@ export const inventoryResolvers = {
   Mutation: {
     addInventoryItem: (
       _: unknown,
-      { input }: { input: AddInventoryItemInput },
+      { input }: { input: unknown },
       ctx: Context,
     ) => {
       requireAuth(ctx);
-      return ctx.prisma.inventoryItem.create({ data: input, include: { part: true } });
+      const data = validate(AddInventoryItemSchema, input);
+      return ctx.prisma.inventoryItem.create({ data, include: { part: true } });
     },
   },
 
