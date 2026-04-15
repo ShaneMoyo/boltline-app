@@ -7,6 +7,7 @@ import {
   inventoryTypeDefs,
   workOrderTypeDefs,
   dashboardTypeDefs,
+  authTypeDefs,
 } from './schema/index.js';
 import { resolvers } from './resolvers/index.js';
 import { createContext } from './lib/context.js';
@@ -19,13 +20,14 @@ const server = new ApolloServer({
     inventoryTypeDefs,
     workOrderTypeDefs,
     dashboardTypeDefs,
+    authTypeDefs,
   ],
   resolvers,
 });
 
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
-  context: createContext,
+  context: async ({ req }) => createContext(req),
 });
 
 console.log(`🚀  API server ready at ${url}`);

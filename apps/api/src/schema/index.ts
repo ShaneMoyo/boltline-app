@@ -15,3 +15,4 @@ export * from './bom.schema.js';
 export * from './inventory.schema.js';
 export * from './workorder.schema.js';
 export * from './dashboard.schema.js';
+export * from './auth.schema.js';
