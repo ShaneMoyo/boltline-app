@@ -210,17 +210,6 @@ Vite Dev Server ──proxy──► Apollo Server 4 (port 4000)
               'E2E tests (Playwright): full browser against the running stack — covers user-facing flows like create → search → edit',
             ]}
           />
-          <FeatureCard
-            icon="🔄"
-            title="Incremental Build + Conventional Commits"
-            description="The entire app was built commit-by-commit following a strict sequence — each commit leaves the app in a working, testable state."
-            bullets={[
-              '28 commits across 7 phases: Foundation → Parts → BOM → Inventory → Work Orders → Dashboard → Polish',
-              'Tests travel with feature code — no separate "add tests" commits',
-              'Conventional Commits format (feat:, test:, chore:, fix:) throughout',
-              'GitHub Actions CI runs lint → typecheck → unit → integration → E2E on every push',
-            ]}
-          />
         </div>
       </Section>
 
