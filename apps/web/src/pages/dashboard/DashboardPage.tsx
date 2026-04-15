@@ -92,7 +92,7 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
 
       {stats && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard label="Total Parts" value={stats.totalParts} color="blue" />
           <StatCard label="Open Work Orders" value={stats.openWorkOrders} color="yellow" />
           <StatCard

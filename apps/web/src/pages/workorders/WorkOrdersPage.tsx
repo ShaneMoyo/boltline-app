@@ -166,7 +166,7 @@ export default function WorkOrdersPage() {
         </form>
       )}
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {STATUS_COLUMNS.map((col) => {
           const colOrders = workOrders.filter((wo) => wo.status === col.key);
           return (

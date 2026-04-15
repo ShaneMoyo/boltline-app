@@ -154,7 +154,7 @@ export default function InventoryPage() {
         </form>
       )}
 
-      <div className="flex gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <select
           value={filterPartId}
           onChange={(e) => setFilterPartId(e.target.value)}
@@ -182,42 +182,66 @@ export default function InventoryPage() {
       ) : items.length === 0 ? (
         <div className="text-center py-16 text-gray-400">No inventory items found.</div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="text-left px-4 py-3 text-gray-600 font-medium">Part</th>
-                <th className="text-left px-4 py-3 text-gray-600 font-medium">Location</th>
-                <th className="text-right px-4 py-3 text-gray-600 font-medium">Quantity</th>
-                <th className="text-left px-4 py-3 text-gray-600 font-medium">Unit</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {items.map((item) => (
-                <tr
-                  key={item.id}
-                  className={`hover:bg-gray-50 ${item.quantity < 5 ? 'bg-red-50' : ''}`}
-                >
-                  <td className="px-4 py-3">
-                    <span className="font-mono text-blue-700 text-xs mr-2">
-                      {item.part.partNumber}
-                    </span>
-                    <span className="text-gray-900">{item.part.name}</span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">{item.location}</td>
-                  <td
-                    className={`px-4 py-3 text-right font-medium ${
-                      item.quantity < 5 ? 'text-red-600' : 'text-gray-900'
-                    }`}
-                  >
-                    {item.quantity}
-                  </td>
-                  <td className="px-4 py-3 text-gray-500">{item.part.unit}</td>
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Part</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Location</th>
+                  <th className="text-right px-4 py-3 text-gray-600 font-medium">Quantity</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Unit</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {items.map((item) => (
+                  <tr
+                    key={item.id}
+                    className={`hover:bg-gray-50 ${item.quantity < 5 ? 'bg-red-50' : ''}`}
+                  >
+                    <td className="px-4 py-3">
+                      <span className="font-mono text-blue-700 text-xs mr-2">
+                        {item.part.partNumber}
+                      </span>
+                      <span className="text-gray-900">{item.part.name}</span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-700">{item.location}</td>
+                    <td
+                      className={`px-4 py-3 text-right font-medium ${
+                        item.quantity < 5 ? 'text-red-600' : 'text-gray-900'
+                      }`}
+                    >
+                      {item.quantity}
+                    </td>
+                    <td className="px-4 py-3 text-gray-500">{item.part.unit}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className={`bg-white rounded-lg border border-gray-200 p-4 ${item.quantity < 5 ? 'border-red-200 bg-red-50' : ''}`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0">
+                    <p className="font-mono text-xs text-blue-700">{item.part.partNumber}</p>
+                    <p className="font-medium text-gray-900 mt-0.5">{item.part.name}</p>
+                  </div>
+                  <span className={`text-lg font-bold shrink-0 ml-2 ${item.quantity < 5 ? 'text-red-600' : 'text-gray-900'}`}>
+                    {item.quantity} <span className="text-xs font-normal text-gray-400">{item.part.unit}</span>
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">{item.location}</p>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

@@ -54,18 +54,18 @@ function BOMTreeNode({ node, depth = 0 }: { node: BOMNode; depth?: number }) {
   return (
     <div>
       <div
-        className={`flex items-center gap-2 py-1.5 px-2 rounded cursor-pointer hover:bg-gray-50 ${
+        className={`flex flex-wrap items-center gap-1 sm:gap-2 py-1.5 px-2 rounded cursor-pointer hover:bg-gray-50 ${
           depth === 0 ? 'font-semibold' : ''
         }`}
-        style={{ paddingLeft: `${depth * 24 + 8}px` }}
+        style={{ paddingLeft: `${depth * 16 + 8}px` }}
         onClick={() => hasChildren && setExpanded(!expanded)}
       >
-        <span className="w-4 text-gray-400 text-xs">
+        <span className="w-4 text-gray-400 text-xs shrink-0">
           {hasChildren ? (expanded ? '▼' : '▶') : '•'}
         </span>
-        <span className="font-mono text-xs text-blue-700 w-28 shrink-0">{node.part.partNumber}</span>
-        <span className="text-sm text-gray-900">{node.part.name}</span>
-        <span className="text-xs text-gray-400 ml-auto">
+        <span className="font-mono text-xs text-blue-700 shrink-0">{node.part.partNumber}</span>
+        <span className="text-sm text-gray-900 break-words">{node.part.name}</span>
+        <span className="text-xs text-gray-400 ml-auto shrink-0">
           ×{node.quantity} {node.part.unit}
         </span>
       </div>
@@ -123,7 +123,7 @@ export default function BOMPage() {
       </div>
 
       {showAddForm && (
-        <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 flex gap-3 items-end">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 flex flex-col sm:flex-row gap-3 sm:items-end">
           <div className="flex-1">
             <label className="block text-xs text-gray-500 mb-1">Child Part</label>
             <select

@@ -55,25 +55,25 @@ export default function PartDetailPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
         <div className="flex items-start justify-between mb-6">
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-mono text-blue-700 mb-1">{part.partNumber}</p>
-            <h1 className="text-2xl font-bold text-gray-900">{part.name}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">{part.name}</h1>
           </div>
           <Link
             to={`/parts/${part.id}/edit`}
-            className="text-sm bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50"
+            className="text-sm bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 shrink-0 ml-3"
           >
             Edit
           </Link>
         </div>
 
-        <dl className="grid grid-cols-2 gap-6">
+        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <Field label="Part Number" value={part.partNumber} />
           <Field label="Unit" value={part.unit} />
           {part.description && (
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <Field label="Description" value={part.description} />
             </div>
           )}

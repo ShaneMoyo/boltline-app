@@ -83,16 +83,16 @@ export default function WorkOrderDetailPage() {
         </Link>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-4">
-        <div className="flex items-start justify-between mb-4">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{wo.title}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">{wo.title}</h1>
             <p className="text-sm text-blue-700 font-mono mt-1">
               {wo.part.partNumber} — {wo.part.name}
             </p>
           </div>
           <span
-            className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_BADGE[wo.status]}`}
+            className={`self-start text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${STATUS_BADGE[wo.status]}`}
           >
             {wo.status.replace('_', ' ')}
           </span>
