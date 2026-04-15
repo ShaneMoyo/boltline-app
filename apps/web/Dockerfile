@@ -25,9 +25,14 @@ RUN pnpm --filter @boltline/web run build
 # --- Runner stage ---
 FROM nginx:alpine AS runner
 
+RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -s /bin/sh -D appuser
+RUN chown -R appuser:appgroup /var/cache/nginx /var/log/nginx /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && chown appuser:appgroup /var/run/nginx.pid
+
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
 
+USER appuser
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
