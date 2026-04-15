@@ -1,4 +1,5 @@
 import { GraphQLFormattedError, GraphQLError } from 'graphql';
+import { logger } from './logger.js';
 
 const PRISMA_USER_FACING: Record<string, string> = {
   P2002: 'A record with that value already exists.',
@@ -22,7 +23,7 @@ export function formatError(
   }
 
   if (formattedError.extensions?.code === 'INTERNAL_SERVER_ERROR') {
-    console.error('[GraphQL Error]', error);
+    logger.error({ err: error }, 'Internal GraphQL error');
     return {
       ...formattedError,
       message: 'An internal error occurred.',

@@ -17,6 +17,7 @@ import {
 import { resolvers } from './resolvers/index.js';
 import { createContext } from './lib/context.js';
 import { formatError } from './lib/formatError.js';
+import { logger } from './lib/logger.js';
 
 const server = new ApolloServer({
   typeDefs: [
@@ -48,6 +49,14 @@ app.use(
 app.use(rateLimit({ windowMs: 60_000, max: 100, standardHeaders: true, legacyHeaders: false }));
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    logger.info({ method: req.method, path: req.path, status: res.statusCode, ms: Date.now() - start });
+  });
+  next();
+});
+
 app.use(
   '/graphql',
   expressMiddleware(server, {
@@ -57,5 +66,5 @@ app.use(
 
 const PORT = Number(process.env.PORT) || 4000;
 app.listen(PORT, () => {
-  console.log(`🚀  API server ready at http://localhost:${PORT}/graphql`);
+  logger.info({ port: PORT }, 'API server ready');
 });

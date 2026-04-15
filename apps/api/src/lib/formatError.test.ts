@@ -1,6 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
 import { GraphQLError } from 'graphql';
+
+vi.mock('./logger.js', () => ({
+  logger: {
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 import { formatError } from './formatError.js';
+import { logger } from './logger.js';
 
 describe('formatError', () => {
   it('maps Prisma P2002 to user-friendly message', () => {
@@ -25,7 +36,6 @@ describe('formatError', () => {
   });
 
   it('masks INTERNAL_SERVER_ERROR with generic message', () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const formatted = { message: 'Sensitive details', extensions: { code: 'INTERNAL_SERVER_ERROR' } };
     const gqlError = new GraphQLError('Sensitive details', {
       originalError: new Error('db connection failed'),
@@ -34,8 +44,7 @@ describe('formatError', () => {
     const result = formatError(formatted, gqlError);
 
     expect(result.message).toBe('An internal error occurred.');
-    expect(consoleSpy).toHaveBeenCalled();
-    consoleSpy.mockRestore();
+    expect(logger.error).toHaveBeenCalled();
   });
 
   it('passes through user-facing errors unchanged', () => {
