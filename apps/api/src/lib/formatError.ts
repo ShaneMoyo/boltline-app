@@ -1,5 +1,4 @@
-import { GraphQLFormattedError } from 'graphql';
-import { unwrapResolverError } from '@apollo/server';
+import { GraphQLFormattedError, GraphQLError } from 'graphql';
 
 const PRISMA_USER_FACING: Record<string, string> = {
   P2002: 'A record with that value already exists.',
@@ -10,7 +9,8 @@ export function formatError(
   formattedError: GraphQLFormattedError,
   error: unknown,
 ): GraphQLFormattedError {
-  const originalError = unwrapResolverError(error) as { code?: string } | undefined;
+  const originalError =
+    error instanceof GraphQLError ? (error.originalError as { code?: string } | undefined) : undefined;
   const prismaCode = originalError?.code;
 
   if (prismaCode && PRISMA_USER_FACING[prismaCode]) {
