@@ -9,6 +9,7 @@ const InventoryPage = lazy(() => import('./pages/inventory/InventoryPage.tsx'));
 const WorkOrdersPage = lazy(() => import('./pages/workorders/WorkOrdersPage.tsx'));
 const WorkOrderDetailPage = lazy(() => import('./pages/workorders/WorkOrderDetailPage.tsx'));
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage.tsx'));
+const AboutPage = lazy(() => import('./pages/about/AboutPage.tsx'));
 
 function NavItem({ to, label }: { to: string; label: string }) {
   return (
@@ -43,6 +44,7 @@ export default function App() {
           <NavItem to="/inventory" label="Inventory" />
           <NavItem to="/work-orders" label="Work Orders" />
           <NavItem to="/dashboard" label="Dashboard" />
+          <NavItem to="/about" label="About" />
         </nav>
 
         <main className="p-6">
@@ -58,6 +60,7 @@ export default function App() {
               <Route path="/work-orders" element={<WorkOrdersPage />} />
               <Route path="/work-orders/:id" element={<WorkOrderDetailPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Suspense>
         </main>
