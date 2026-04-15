@@ -2,44 +2,24 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, gql } from '@apollo/client';
 
+const BOM_NODE_FIELDS = `
+  part { id partNumber name unit }
+  quantity
+`;
+
 const BOM_TREE_QUERY = gql`
   query BOMTree($rootPartId: ID!) {
     bomTree(rootPartId: $rootPartId) {
-      part {
-        id
-        partNumber
-        name
-        unit
-      }
-      quantity
+      ${BOM_NODE_FIELDS}
       children {
-        part {
-          id
-          partNumber
-          name
-          unit
-        }
-        quantity
+        ${BOM_NODE_FIELDS}
         children {
-          part {
-            id
-            partNumber
-            name
-            unit
-          }
-          quantity
+          ${BOM_NODE_FIELDS}
           children {
-            part {
-              id
-              partNumber
-              name
-              unit
-            }
-            quantity
+            ${BOM_NODE_FIELDS}
             children {
-              part { id partNumber name unit }
-              quantity
-              children { part { id partNumber name unit } quantity children { part { id partNumber name unit } quantity children { part { id partNumber name unit } quantity children { part { id partNumber name unit } quantity children { part { id partNumber name unit } quantity children { part { id partNumber name unit } quantity children { } } } } } } } }
+              ${BOM_NODE_FIELDS}
+            }
           }
         }
       }
