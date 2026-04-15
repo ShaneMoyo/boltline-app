@@ -9,6 +9,7 @@ import {
   dashboardTypeDefs,
   authTypeDefs,
 } from './schema/index.js';
+import depthLimit from 'graphql-depth-limit';
 import { resolvers } from './resolvers/index.js';
 import { createContext } from './lib/context.js';
 import { formatError } from './lib/formatError.js';
@@ -25,6 +26,8 @@ const server = new ApolloServer({
   ],
   resolvers,
   formatError,
+  validationRules: [depthLimit(10)],
+  introspection: process.env.NODE_ENV !== 'production',
 });
 
 const { url } = await startStandaloneServer(server, {

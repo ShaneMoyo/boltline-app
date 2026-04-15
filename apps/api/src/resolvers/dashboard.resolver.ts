@@ -24,10 +24,10 @@ export const dashboardResolvers = {
       };
     },
 
-    recentActivity: (_: unknown, { limit = 20 }: { limit?: number }, { prisma }: Context) =>
+    recentActivity: (_: unknown, { limit }: { limit?: number }, { prisma }: Context) =>
       prisma.activityLog.findMany({
         orderBy: { createdAt: 'desc' },
-        take: limit,
+        take: Math.min(limit ?? 20, 100),
       }),
   },
 };
