@@ -12,7 +12,7 @@ vi.mock('../lib/prisma.js', () => ({
 }));
 
 const mockPrisma = vi.mocked(prisma);
-const ctx = { prisma: mockPrisma };
+const ctx = { prisma: mockPrisma, user: null };
 
 beforeEach(() => vi.clearAllMocks());
 

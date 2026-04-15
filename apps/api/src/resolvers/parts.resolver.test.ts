@@ -14,7 +14,10 @@ vi.mock('../lib/prisma.js', () => ({
 }));
 
 const mockPrisma = vi.mocked(prisma);
-const ctx = { prisma: mockPrisma };
+const ctx = { prisma: mockPrisma, user: null };
+
+const mockUser = { id: 'u1', email: 'test@test.com', name: 'Test', passwordHash: null, googleId: null, avatarUrl: null, createdAt: new Date() };
+const authedCtx = { prisma: mockPrisma, user: mockUser };
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -75,7 +78,7 @@ describe('Mutation.createPart', () => {
     const input = { partNumber: 'P-001', name: 'Injector Valve', unit: 'each' };
     mockPrisma.part.create.mockResolvedValue({ ...mockPart, ...input });
 
-    const result = await partsResolvers.Mutation.createPart(null, { input }, ctx);
+    const result = await partsResolvers.Mutation.createPart(null, { input }, authedCtx);
 
     expect(mockPrisma.part.create).toHaveBeenCalledWith({ data: input });
     expect(result).toMatchObject(input);
@@ -90,9 +93,16 @@ describe('Mutation.createPart', () => {
     };
     mockPrisma.part.create.mockResolvedValue({ ...mockPart, ...input });
 
-    await partsResolvers.Mutation.createPart(null, { input }, ctx);
+    await partsResolvers.Mutation.createPart(null, { input }, authedCtx);
 
     expect(mockPrisma.part.create).toHaveBeenCalledWith({ data: input });
+  });
+
+  it('rejects unauthenticated requests', () => {
+    const input = { partNumber: 'P-003', name: 'Blocked', unit: 'each' };
+    expect(() => partsResolvers.Mutation.createPart(null, { input }, ctx)).toThrow(
+      /must be logged in/,
+    );
   });
 });
 
@@ -101,7 +111,7 @@ describe('Mutation.updatePart', () => {
     const input = { name: 'Updated Valve' };
     mockPrisma.part.update.mockResolvedValue({ ...mockPart, ...input });
 
-    const result = await partsResolvers.Mutation.updatePart(null, { id: 'clxxx1', input }, ctx);
+    const result = await partsResolvers.Mutation.updatePart(null, { id: 'clxxx1', input }, authedCtx);
 
     expect(mockPrisma.part.update).toHaveBeenCalledWith({
       where: { id: 'clxxx1' },
@@ -114,7 +124,7 @@ describe('Mutation.updatePart', () => {
     const input = { unit: 'kg' };
     mockPrisma.part.update.mockResolvedValue({ ...mockPart, unit: 'kg' });
 
-    await partsResolvers.Mutation.updatePart(null, { id: 'clxxx1', input }, ctx);
+    await partsResolvers.Mutation.updatePart(null, { id: 'clxxx1', input }, authedCtx);
 
     expect(mockPrisma.part.update).toHaveBeenCalledWith({
       where: { id: 'clxxx1' },

@@ -1,4 +1,5 @@
 import { Context } from '../lib/context.js';
+import { requireAuth } from '../lib/requireAuth.js';
 
 interface AddInventoryItemInput {
   partId: string;
@@ -27,8 +28,11 @@ export const inventoryResolvers = {
     addInventoryItem: (
       _: unknown,
       { input }: { input: AddInventoryItemInput },
-      { prisma }: Context,
-    ) => prisma.inventoryItem.create({ data: input, include: { part: true } }),
+      ctx: Context,
+    ) => {
+      requireAuth(ctx);
+      return ctx.prisma.inventoryItem.create({ data: input, include: { part: true } });
+    },
   },
 
   InventoryItem: {

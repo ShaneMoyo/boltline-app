@@ -15,7 +15,9 @@ vi.mock('../lib/prisma.js', () => ({
 }));
 
 const mockPrisma = vi.mocked(prisma);
-const ctx = { prisma: mockPrisma };
+const mockUser = { id: 'u1', email: 'test@test.com', name: 'Test', passwordHash: null, googleId: null, avatarUrl: null, createdAt: new Date() };
+const ctx = { prisma: mockPrisma, user: null };
+const authedCtx = { prisma: mockPrisma, user: mockUser };
 
 const mockPart = { id: 'p1', partNumber: 'INV-001', name: 'Valve', unit: 'each' };
 const mockItem = { id: 'inv1', partId: 'p1', location: 'Rack A', quantity: 10, part: mockPart };
@@ -68,7 +70,7 @@ describe('Mutation.addInventoryItem', () => {
     const input = { partId: 'p1', location: 'Rack B', quantity: 5 };
     mockPrisma.inventoryItem.create.mockResolvedValue({ ...mockItem, ...input });
 
-    const result = await inventoryResolvers.Mutation.addInventoryItem(null, { input }, ctx);
+    const result = await inventoryResolvers.Mutation.addInventoryItem(null, { input }, authedCtx);
 
     expect(mockPrisma.inventoryItem.create).toHaveBeenCalledWith({
       data: input,

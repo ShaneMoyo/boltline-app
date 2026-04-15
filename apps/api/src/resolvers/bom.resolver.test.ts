@@ -12,7 +12,7 @@ vi.mock('../lib/prisma.js', () => ({
 const mockPrisma = vi.mocked(prisma);
 
 function ctx() {
-  return { prisma: mockPrisma };
+  return { prisma: mockPrisma, user: null };
 }
 
 const partA = { id: 'A', partNumber: 'P-A', name: 'Part A', unit: 'each' };

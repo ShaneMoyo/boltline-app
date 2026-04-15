@@ -1,4 +1,5 @@
 import { Context } from '../lib/context.js';
+import { requireAuth } from '../lib/requireAuth.js';
 
 interface CreateWorkOrderInput {
   title: string;
@@ -28,9 +29,10 @@ export const workOrderResolvers = {
     createWorkOrder: async (
       _: unknown,
       { input }: { input: CreateWorkOrderInput },
-      { prisma }: Context,
+      ctx: Context,
     ) => {
-      const workOrder = await prisma.workOrder.create({
+      requireAuth(ctx);
+      return ctx.prisma.workOrder.create({
         data: {
           title: input.title,
           partId: input.partId,
@@ -40,36 +42,40 @@ export const workOrderResolvers = {
         },
         include: { part: true, steps: true },
       });
-      return workOrder;
     },
 
     updateWorkOrderStatus: async (
       _: unknown,
       { id, status }: { id: string; status: WorkOrderStatus },
-      { prisma }: Context,
-    ) =>
-      prisma.workOrder.update({
+      ctx: Context,
+    ) => {
+      requireAuth(ctx);
+      return ctx.prisma.workOrder.update({
         where: { id },
         data: { status },
         include: { part: true, steps: true },
-      }),
+      });
+    },
 
-    completeStep: async (_: unknown, { stepId }: { stepId: string }, { prisma }: Context) => {
-      const step = await prisma.step.update({
+    completeStep: async (_: unknown, { stepId }: { stepId: string }, ctx: Context) => {
+      requireAuth(ctx);
+      const step = await ctx.prisma.step.update({
         where: { id: stepId },
         data: { completed: true },
       });
 
-      const allSteps = await prisma.step.findMany({ where: { workOrderId: step.workOrderId } });
+      const allSteps = await ctx.prisma.step.findMany({
+        where: { workOrderId: step.workOrderId },
+      });
       const allDone = allSteps.every((s) => s.completed);
 
       if (allDone) {
-        await prisma.workOrder.update({
+        await ctx.prisma.workOrder.update({
           where: { id: step.workOrderId },
           data: { status: 'COMPLETE' },
         });
       } else {
-        await prisma.workOrder.update({
+        await ctx.prisma.workOrder.update({
           where: { id: step.workOrderId, status: 'PENDING' },
           data: { status: 'IN_PROGRESS' },
         });

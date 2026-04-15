@@ -18,7 +18,9 @@ vi.mock('../lib/prisma.js', () => ({
 }));
 
 const mockPrisma = vi.mocked(prisma);
-const ctx = { prisma: mockPrisma };
+const mockUser = { id: 'u1', email: 'test@test.com', name: 'Test', passwordHash: null, googleId: null, avatarUrl: null, createdAt: new Date() };
+const ctx = { prisma: mockPrisma, user: null };
+const authedCtx = { prisma: mockPrisma, user: mockUser };
 
 const mockPart = { id: 'p1', partNumber: 'WO-001', name: 'Engine', unit: 'each' };
 const mockStep1 = { id: 's1', workOrderId: 'wo1', description: 'Install', completed: false };
@@ -84,7 +86,7 @@ describe('Mutation.createWorkOrder', () => {
     const input = { title: 'Assemble', partId: 'p1', steps: ['Step 1', 'Step 2'] };
     mockPrisma.workOrder.create.mockResolvedValue(mockWO);
 
-    const result = await workOrderResolvers.Mutation.createWorkOrder(null, { input }, ctx);
+    const result = await workOrderResolvers.Mutation.createWorkOrder(null, { input }, authedCtx);
 
     expect(mockPrisma.workOrder.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -106,7 +108,7 @@ describe('Mutation.updateWorkOrderStatus', () => {
     const result = await workOrderResolvers.Mutation.updateWorkOrderStatus(
       null,
       { id: 'wo1', status: 'IN_PROGRESS' },
-      ctx,
+      authedCtx,
     );
 
     expect(mockPrisma.workOrder.update).toHaveBeenCalledWith(
@@ -125,7 +127,7 @@ describe('Mutation.completeStep', () => {
     mockPrisma.step.findMany.mockResolvedValue(allDone);
     mockPrisma.workOrder.update.mockResolvedValue({ ...mockWO, status: 'COMPLETE' });
 
-    await workOrderResolvers.Mutation.completeStep(null, { stepId: 's1' }, ctx);
+    await workOrderResolvers.Mutation.completeStep(null, { stepId: 's1' }, authedCtx);
 
     expect(mockPrisma.workOrder.update).toHaveBeenCalledWith(
       expect.objectContaining({ data: { status: 'COMPLETE' } }),
@@ -140,7 +142,7 @@ describe('Mutation.completeStep', () => {
     mockPrisma.step.findMany.mockResolvedValue(partialDone);
     mockPrisma.workOrder.update.mockResolvedValue({ ...mockWO, status: 'IN_PROGRESS' });
 
-    await workOrderResolvers.Mutation.completeStep(null, { stepId: 's1' }, ctx);
+    await workOrderResolvers.Mutation.completeStep(null, { stepId: 's1' }, authedCtx);
 
     expect(mockPrisma.workOrder.update).toHaveBeenCalledWith(
       expect.objectContaining({ data: { status: 'IN_PROGRESS' } }),

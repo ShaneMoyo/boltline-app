@@ -7,6 +7,7 @@ import {
   inventoryTypeDefs,
   workOrderTypeDefs,
   dashboardTypeDefs,
+  authTypeDefs,
 } from '../schema/index.js';
 import { resolvers } from './index.js';
 
@@ -19,6 +20,7 @@ function buildTestServer() {
       inventoryTypeDefs,
       workOrderTypeDefs,
       dashboardTypeDefs,
+      authTypeDefs,
     ],
     resolvers,
   });

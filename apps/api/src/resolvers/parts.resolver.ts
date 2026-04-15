@@ -1,4 +1,5 @@
 import { Context } from '../lib/context.js';
+import { requireAuth } from '../lib/requireAuth.js';
 
 interface CreatePartInput {
   partNumber: string;
@@ -24,13 +25,14 @@ export const partsResolvers = {
   },
 
   Mutation: {
-    createPart: (_: unknown, { input }: { input: CreatePartInput }, { prisma }: Context) =>
-      prisma.part.create({ data: input }),
+    createPart: (_: unknown, { input }: { input: CreatePartInput }, ctx: Context) => {
+      requireAuth(ctx);
+      return ctx.prisma.part.create({ data: input });
+    },
 
-    updatePart: (
-      _: unknown,
-      { id, input }: { id: string; input: UpdatePartInput },
-      { prisma }: Context,
-    ) => prisma.part.update({ where: { id }, data: input }),
+    updatePart: (_: unknown, { id, input }: { id: string; input: UpdatePartInput }, ctx: Context) => {
+      requireAuth(ctx);
+      return ctx.prisma.part.update({ where: { id }, data: input });
+    },
   },
 };

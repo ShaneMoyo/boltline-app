@@ -1,5 +1,6 @@
 import DataLoader from 'dataloader';
 import { Context } from '../lib/context.js';
+import { requireAuth } from '../lib/requireAuth.js';
 
 interface BOMRelationship {
   id: string;
@@ -60,6 +61,7 @@ export const bomResolvers = {
       { parentId, childId, quantity }: { parentId: string; childId: string; quantity: number },
       ctx: Context,
     ) => {
+      requireAuth(ctx);
       await ctx.prisma.bOMRelationship.create({ data: { parentId, childId, quantity } });
       const loader = createChildrenLoader(ctx);
       return buildTree(parentId, 1, new Set(), loader, ctx);
@@ -70,6 +72,7 @@ export const bomResolvers = {
       { parentId, childId }: { parentId: string; childId: string },
       ctx: Context,
     ) => {
+      requireAuth(ctx);
       await ctx.prisma.bOMRelationship.deleteMany({ where: { parentId, childId } });
       return true;
     },
