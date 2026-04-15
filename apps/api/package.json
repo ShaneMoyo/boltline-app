@@ -1,0 +1,30 @@
+{
+  "name": "@boltline/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "@boltline/shared": "workspace:*",
+    "@prisma/client": "^5.17.0",
+    "dataloader": "^2.2.0",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "prisma": "^5.17.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}
