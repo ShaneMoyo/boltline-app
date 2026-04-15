@@ -1,5 +1,10 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { expressMiddleware } from '@apollo/server/express4';
+import depthLimit from 'graphql-depth-limit';
 import {
   baseTypeDefs,
   partsTypeDefs,
@@ -9,7 +14,6 @@ import {
   dashboardTypeDefs,
   authTypeDefs,
 } from './schema/index.js';
-import depthLimit from 'graphql-depth-limit';
 import { resolvers } from './resolvers/index.js';
 import { createContext } from './lib/context.js';
 import { formatError } from './lib/formatError.js';
@@ -30,9 +34,28 @@ const server = new ApolloServer({
   introspection: process.env.NODE_ENV !== 'production',
 });
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context: async ({ req }) => createContext(req),
-});
+await server.start();
 
-console.log(`🚀  API server ready at ${url}`);
+const app = express();
+
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') ?? '*',
+    credentials: true,
+  }),
+);
+app.use(rateLimit({ windowMs: 60_000, max: 100, standardHeaders: true, legacyHeaders: false }));
+app.use(express.json());
+
+app.use(
+  '/graphql',
+  expressMiddleware(server, {
+    context: async ({ req }) => createContext(req),
+  }),
+);
+
+const PORT = Number(process.env.PORT) || 4000;
+app.listen(PORT, () => {
+  console.log(`🚀  API server ready at http://localhost:${PORT}/graphql`);
+});
