@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: boltline
+      POSTGRES_USER: boltline
+      POSTGRES_PASSWORD: boltline
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U boltline -d boltline']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - '4000:4000'
+    environment:
+      DATABASE_URL: postgresql://boltline:boltline@postgres:5432/boltline
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_USER: boltline
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
+      - ./packages/shared/src:/app/packages/shared/src
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - '5173:5173'
+    environment:
+      API_URL: http://api:4000
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+
+volumes:
+  postgres_data:
