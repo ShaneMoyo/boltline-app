@@ -35,7 +35,6 @@ RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
-COPY --from=builder /app/apps/api/node_modules/.prisma ./apps/api/node_modules/.prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -s /bin/sh -D appuser
