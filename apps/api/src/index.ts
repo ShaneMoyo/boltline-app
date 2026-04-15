@@ -72,7 +72,7 @@ app.use(
   '/graphql',
   expressMiddleware(server, {
     context: async ({ req }) => createContext(req),
-  }),
+  }) as unknown as express.RequestHandler,
 );
 
 const PORT = Number(process.env.PORT) || 4000;

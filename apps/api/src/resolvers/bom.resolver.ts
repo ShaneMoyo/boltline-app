@@ -9,7 +9,7 @@ interface BOMRelationship {
   quantity: number;
 }
 
-interface BOMNode {
+export interface BOMNode {
   part: { id: string; partNumber: string; name: string; unit: string };
   quantity: number;
   children: BOMNode[];
