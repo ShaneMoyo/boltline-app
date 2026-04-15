@@ -1,6 +1,5 @@
 import DataLoader from 'dataloader';
 import { Context } from '../lib/context.js';
-import { prisma as defaultPrisma } from '../lib/prisma.js';
 
 interface BOMRelationship {
   id: string;
@@ -78,4 +77,3 @@ export const bomResolvers = {
 };
 
 export { createChildrenLoader, buildTree };
-export { defaultPrisma };
