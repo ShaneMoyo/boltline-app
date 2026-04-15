@@ -11,4 +11,8 @@ echo "Running database migrations..."
 cd /app && pnpm --filter @boltline/api exec prisma migrate deploy
 
 echo "Starting API server..."
-exec pnpm --filter @boltline/api dev
+if [ "$NODE_ENV" = "production" ]; then
+  exec node apps/api/dist/index.js
+else
+  exec pnpm --filter @boltline/api dev
+fi

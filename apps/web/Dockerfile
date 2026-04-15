@@ -1,4 +1,5 @@
-FROM node:20-alpine
+# --- Builder stage ---
+FROM node:20-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
@@ -7,12 +8,26 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/shared/package.json ./packages/shared/
+COPY tsconfig.base.json ./
 
 RUN pnpm install --frozen-lockfile
 
 COPY packages/shared ./packages/shared
 COPY apps/web ./apps/web
 
-EXPOSE 5173
+ARG VITE_API_URL
+ARG VITE_GOOGLE_CLIENT_ID
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
-CMD ["pnpm", "--filter", "@boltline/web", "dev", "--", "--host", "0.0.0.0"]
+RUN pnpm --filter @boltline/web run build
+
+# --- Runner stage ---
+FROM nginx:alpine AS runner
+
+COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
