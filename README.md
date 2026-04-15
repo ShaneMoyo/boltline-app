@@ -163,6 +163,16 @@ docker-compose -f docker-compose.prod.yml up -d
 | Structured logging (pino) | ✅ |
 | Error masking | ✅ |
 
+## Connection Pooling
+
+Prisma's built-in connection pool is configured via `DATABASE_URL` query params:
+
+```
+?connection_limit=10&pool_timeout=30
+```
+
+For higher scale, consider placing **PgBouncer** between the API and Postgres. Point `DATABASE_URL` at PgBouncer and add `?pgbouncer=true` to enable Prisma's PgBouncer compatibility mode (disables prepared statements).
+
 ## CI
 
 GitHub Actions runs on every push:
