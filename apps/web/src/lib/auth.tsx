@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import { gql, useMutation, useQuery, ApolloError } from '@apollo/client';
+import { readStoredToken } from './tokenStorage';
 
 interface AuthUser {
   id: string;
@@ -21,6 +22,19 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+
+const TOKEN_KEY = 'lineforge_token';
+const LEGACY_TOKEN_KEY = 'boltline_token';
+
+function persistToken(token: string) {
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.removeItem(LEGACY_TOKEN_KEY);
+}
+
+function clearStoredToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(LEGACY_TOKEN_KEY);
+}
 
 const CURRENT_USER = gql`
   query CurrentUser {
@@ -61,7 +75,7 @@ const GOOGLE_LOGIN = gql`
 `;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('boltline_token'));
+  const [token, setToken] = useState<string | null>(() => readStoredToken());
   const [user, setUser] = useState<AuthUser | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,14 +83,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     skip: !token,
     onCompleted: (data) => setUser(data.currentUser),
     onError: () => {
-      localStorage.removeItem('boltline_token');
+      clearStoredToken();
       setToken(null);
       setUser(null);
     },
   });
 
   const handleAuth = useCallback((data: { token: string; user: AuthUser }) => {
-    localStorage.setItem('boltline_token', data.token);
+    persistToken(data.token);
     setToken(data.token);
     setUser(data.user);
     setError(null);
@@ -109,7 +123,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await googleLoginMutation({ variables: { googleToken } });
   };
   const logout = () => {
-    localStorage.removeItem('boltline_token');
+    clearStoredToken();
     setToken(null);
     setUser(null);
   };

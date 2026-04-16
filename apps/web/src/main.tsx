@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@ap
 import { setContext } from '@apollo/client/link/context';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App.tsx';
+import { readStoredToken } from './lib/tokenStorage';
 import './index.css';
 
 const httpLink = createHttpLink({
@@ -11,7 +12,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('boltline_token');
+  const token = readStoredToken();
   return {
     headers: {
       ...headers,

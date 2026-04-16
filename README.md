@@ -1,6 +1,6 @@
-# Boltline
+# LineForge
 
-A manufacturing ERP application for managing parts libraries, bill of materials (BOM) trees, inventory, and work orders.
+A manufacturing ERP application for managing parts libraries, bill of materials (BOM) trees, inventory, and work orders. Independent portfolio demo — not affiliated with any company or commercial product.
 
 ## Quick Start
 
@@ -20,13 +20,13 @@ To seed with sample Merlin-1D rocket engine data:
 
 ```bash
 # After docker-compose up is running:
-pnpm --filter @boltline/api db:seed
+pnpm --filter @lineforge/api db:seed
 ```
 
 ## Architecture
 
 ```
-boltline-app/
+lineforge-app/
 ├── apps/
 │   ├── api/           # Express + Apollo Server 4 + GraphQL + Prisma ORM
 │   └── web/           # Vite + React 18 + TypeScript + Tailwind + Apollo Client
@@ -82,16 +82,16 @@ docker-compose up postgres -d
 cp .env.example .env
 
 # Generate Prisma client
-pnpm --filter @boltline/api db:generate
+pnpm --filter @lineforge/api db:generate
 
 # Apply migrations
-pnpm --filter @boltline/api db:migrate
+pnpm --filter @lineforge/api db:migrate
 
 # Start API
-pnpm --filter @boltline/api dev
+pnpm --filter @lineforge/api dev
 
 # Start web (in another terminal)
-pnpm --filter @boltline/web dev
+pnpm --filter @lineforge/web dev
 ```
 
 ## Testing
@@ -102,8 +102,8 @@ pnpm test
 
 # Integration tests (requires test DB on port 5433)
 docker-compose -f docker-compose.test.yml up -d
-DATABASE_URL=postgresql://boltline:boltline@localhost:5433/boltline_test \
-  pnpm --filter @boltline/api test:integration
+DATABASE_URL=postgresql://lineforge:lineforge@localhost:5433/lineforge_test \
+  pnpm --filter @lineforge/api test:integration
 
 # E2E tests (requires full docker-compose stack running)
 docker-compose up -d
@@ -117,7 +117,7 @@ pnpm e2e
 1. Import the repo in Vercel
 2. Set **Root Directory** to `apps/web`
 3. Set environment variables:
-   - `VITE_API_URL` — your API server URL (e.g. `https://api.boltline.example.com`)
+   - `VITE_API_URL` — your API server URL (e.g. `https://api.lineforge.example.com`)
    - `VITE_GOOGLE_CLIENT_ID` — Google OAuth client ID
 4. Vercel auto-detects Vite and runs the build via `vercel.json`
 

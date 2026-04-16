@@ -95,11 +95,12 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">About Boltline</h1>
+        <h1 className="text-2xl font-bold text-gray-900">About LineForge</h1>
         <p className="mt-2 text-gray-500 text-sm max-w-2xl">
-          A full-stack manufacturing ERP built as a technical demonstration. Covers parts
+          A full-stack manufacturing ERP built as a personal portfolio demo. Covers parts
           management, bill-of-materials trees, inventory tracking, and work order workflows — all
-          connected through a GraphQL API backed by a relational database.
+          connected through a GraphQL API backed by a relational database. This project is
+          independent and not affiliated with any company or commercial product.
         </p>
       </div>
 
@@ -109,7 +110,7 @@ export default function AboutPage() {
           <StackRow
             layer="Monorepo"
             tech="pnpm workspaces"
-            detail="Three packages: @boltline/api, @boltline/web, @boltline/shared. Single lockfile, shared TypeScript config extended per workspace."
+            detail="Three packages: @lineforge/api, @lineforge/web, @lineforge/shared. Single lockfile, shared TypeScript config extended per workspace."
             color="gray"
           />
           <StackRow
@@ -307,7 +308,7 @@ model Step {
       {/* Repo structure */}
       <Section title="Repository Structure">
         <CodeBlock
-          code={`boltline-app/
+          code={`lineforge-app/
 ├── apps/
 │   ├── api/
 │   │   ├── src/

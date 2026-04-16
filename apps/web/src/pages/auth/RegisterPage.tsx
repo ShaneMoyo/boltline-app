@@ -38,7 +38,7 @@ export default function RegisterPage() {
         <div>
           <h1 className="text-3xl font-bold text-center text-gray-900">Create your account</h1>
           <p className="mt-2 text-center text-sm text-gray-500">
-            Get started with Boltline
+            Get started with LineForge
           </p>
         </div>
 

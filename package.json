@@ -1,5 +1,5 @@
 {
-  "name": "boltline-app",
+  "name": "lineforge-app",
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
@@ -7,8 +7,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r run typecheck",
-    "test": "pnpm --filter @boltline/api run test",
-    "test:integration": "pnpm --filter @boltline/api run test:integration",
+    "test": "pnpm --filter @lineforge/api run test",
+    "test:integration": "pnpm --filter @lineforge/api run test:integration",
     "e2e": "playwright test"
   },
   "devDependencies": {

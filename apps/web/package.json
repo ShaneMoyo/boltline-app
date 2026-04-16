@@ -1,5 +1,5 @@
 {
-  "name": "@boltline/web",
+  "name": "@lineforge/web",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.0",
-    "@boltline/shared": "workspace:*",
+    "@lineforge/shared": "workspace:*",
     "@react-oauth/google": "^0.13.5",
     "graphql": "^16.9.0",
     "react": "^18.3.1",

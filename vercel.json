@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @boltline/web run build",
+  "buildCommand": "pnpm --filter @lineforge/web run build",
   "installCommand": "pnpm install",
   "outputDirectory": "apps/web/dist",
   "framework": "vite",

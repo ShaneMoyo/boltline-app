@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding Boltline with Merlin-1D rocket engine data...');
+  console.log('🌱 Seeding LineForge with Merlin-1D rocket engine data...');
 
   await prisma.$transaction([
     prisma.activityLog.deleteMany(),

@@ -15,8 +15,8 @@ RUN pnpm install --frozen-lockfile
 COPY packages/shared ./packages/shared
 COPY apps/api ./apps/api
 
-RUN pnpm --filter @boltline/api exec prisma generate
-RUN pnpm --filter @boltline/api run build
+RUN pnpm --filter @lineforge/api exec prisma generate
+RUN pnpm --filter @lineforge/api run build
 
 # --- Runner stage ---
 FROM node:20-alpine AS runner
@@ -35,7 +35,7 @@ RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 
-RUN pnpm --filter @boltline/api exec prisma generate
+RUN pnpm --filter @lineforge/api exec prisma generate
 
 RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -s /bin/sh -D appuser
 RUN chown -R appuser:appgroup /app

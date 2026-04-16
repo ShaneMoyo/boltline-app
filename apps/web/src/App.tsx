@@ -105,7 +105,7 @@ function AppRoutes() {
               <nav className="bg-white border-b border-gray-200 px-4 md:px-6">
                 <div className="flex items-center justify-between md:justify-start md:gap-8">
                   <NavLink to="/" className="text-lg font-bold text-blue-700 py-4 no-underline shrink-0">
-                    ⚡ Boltline
+                    ⚡ LineForge
                   </NavLink>
                   <div className="hidden md:flex items-center gap-8 flex-1">
                     <NavItem to="/parts" label="Parts" />
